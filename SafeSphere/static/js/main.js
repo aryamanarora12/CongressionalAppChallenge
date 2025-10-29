@@ -1,5 +1,3 @@
-// static/js/main.js - COMPLETE FIXED VERSION
-
 document.addEventListener('DOMContentLoaded', function () {
   initializeApp();
   bindAuthUI();
@@ -8,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
   bindGetStartedButton();
 });
 
-// Global variables for prediction settings
 let predictionHours = 3;
 let usePredictiveRouting = true;
 let floodPredictionMarkers = [];
@@ -16,7 +13,6 @@ let riskOverlays = [];
 let directionLine = null;
 let animationInterval = null;
 
-// -------- UI init helpers --------
 function initializeApp() {
   animateHeroElements();
   initializeSmoothScrolling();
@@ -72,7 +68,6 @@ function initializeMobileNavigation() {
   });
 }
 
-// -------- API helpers --------
 function handleApiError(error) {
   console.error('API Error:', error);
   alert(error.message || 'Request failed');
@@ -100,10 +95,8 @@ async function postJSON(url, payload) {
       body: JSON.stringify(payload),
     });
 
-    // Get response as text first
     const text = await res.text();
 
-    // Try to parse as JSON
     let data;
     try {
       data = text ? JSON.parse(text) : {};
@@ -112,7 +105,6 @@ async function postJSON(url, payload) {
       throw new Error('Server returned invalid response');
     }
 
-    // Check if request was successful
     if (!res.ok) {
       const err = new Error(data.error || `Request failed with status ${res.status}`);
       err.status = res.status;
@@ -126,7 +118,6 @@ async function postJSON(url, payload) {
   }
 }
 
-// -------- Auth wiring --------
 function bindAuthUI() {
   const signinBtn  = document.getElementById('signin-btn');
   const signupBtn  = document.getElementById('signup-btn');
@@ -153,11 +144,9 @@ function bindAuthUI() {
           body: JSON.stringify({ email, password })
         });
 
-        // Get the response text first
         const text = await response.text();
         console.log('Response:', text);
 
-        // Try to parse as JSON
         let data;
         try {
           data = JSON.parse(text);
@@ -165,7 +154,6 @@ function bindAuthUI() {
           throw new Error('Invalid response from server: ' + text.substring(0, 100));
         }
 
-        // Check if login was successful
         if (response.ok && data.ok) {
           console.log('Login successful!');
           window.location.href = '/login/success';
@@ -209,11 +197,9 @@ function bindAuthUI() {
           body: JSON.stringify({ email, password })
         });
 
-        // Get the response text first
         const text = await response.text();
         console.log('Response:', text);
 
-        // Try to parse as JSON
         let data;
         try {
           data = JSON.parse(text);
@@ -221,7 +207,6 @@ function bindAuthUI() {
           throw new Error('Invalid response from server: ' + text.substring(0, 100));
         }
 
-        // Check if signup was successful
         if (response.ok && data.ok) {
           console.log('Signup successful!');
           window.location.href = '/signup/success';
@@ -239,7 +224,6 @@ function bindAuthUI() {
   }
 }
 
-// -------- Safety Board --------
 function bindSafetyBoard() {
   const postBtn = document.getElementById('sb-post-btn');
   const list    = document.getElementById('sb-list');
@@ -363,7 +347,6 @@ async function deletePost(e) {
   }
 }
 
-// -------- Sign In tab hide + Avatar --------
 function hideSignInNav() {
   document.getElementById('nav-signin')?.closest('.nav-item')?.remove();
 }
@@ -415,7 +398,6 @@ function renderUserAvatar(email) {
   });
 }
 
-// -------- Get Started button routing --------
 function bindGetStartedButton() {
   const btn = document.getElementById('get-started-btn');
   if (!btn) return;
@@ -436,7 +418,6 @@ function bindGetStartedButton() {
   });
 }
 
-// -------- Google Maps Flood Safe Routing System --------
 let map;
 let directionsService;
 let directionsRenderer;
@@ -444,10 +425,6 @@ let alternativeRenderer;
 let originAutocomplete;
 let destinationAutocomplete;
 
-// Enhanced route calculation with predictive analysis
-// EMERGENCY FIX - Replace ONLY these two functions in your main.js
-
-// 1. Replace calculatePredictiveRoute function (around line 366)
 async function calculatePredictiveRoute() {
   const origin = document.getElementById('route-origin').value;
   const destination = document.getElementById('route-destination').value;
@@ -502,11 +479,9 @@ async function calculatePredictiveRoute() {
   }
 }
 
-// 2. Replace displayPredictiveRoute function (around line 410)
 function displayPredictiveRoute(routeData) {
   const resultsDiv = document.getElementById('route-results');
 
-  // Safety checks
   if (!routeData || !routeData.recommended_route || !routeData.recommended_route.routes) {
     resultsDiv.innerHTML = '<div class="alert alert-danger">Invalid route data received</div>';
     return;
@@ -523,12 +498,10 @@ function displayPredictiveRoute(routeData) {
 
   clearFloodVisualizations();
 
-  // Display route on map
   if (window.directionsRenderer) {
     try {
       window.directionsRenderer.setDirections(routeData.recommended_route);
 
-      // Safely fit bounds
       const bounds = new google.maps.LatLngBounds();
       bounds.extend(leg.start_location);
       bounds.extend(leg.end_location);
@@ -655,7 +628,6 @@ function displayPredictiveRoute(routeData) {
     `;
   }
 
-  // Add turn-by-turn directions
   html += `
     <div class="card bg-dark border-0 shadow">
       <div class="card-body">
@@ -693,39 +665,35 @@ function displayPredictiveRoute(routeData) {
 
   console.log('Predictive route displayed successfully');
 }
-// ADD THIS FUNCTION to your main.js - Put it near the other map functions
 
 function addFakeLocationTracker() {
-  console.log('📍 Adding fake location tracker...');
+  console.log(' Adding fake location tracker...');
 
-  // Your address: 24 Hansom Road, Basking Ridge, NJ
   const fakeLocation = {
     lat: 40.6745,
     lng: -74.5518
   };
 
-  // Create pulsing location marker
   const locationMarker = new google.maps.Marker({
     position: fakeLocation,
     map: window.map,
     title: '24 Hansom Road, Basking Ridge, NJ',
-    zIndex: 9999, // Show on top of everything
+    zIndex: 9999,
     icon: {
       path: google.maps.SymbolPath.CIRCLE,
       fillColor: '#4285F4',
       fillOpacity: 1,
       strokeColor: '#FFFFFF',
       strokeWeight: 4,
-      scale: 20  // Big marker
+      scale: 20
     },
     animation: google.maps.Animation.DROP
   });
 
-  // Create pulsing circle around the marker
   const pulseCircle = new google.maps.Circle({
     map: window.map,
     center: fakeLocation,
-    radius: 50, // 50 meters
+    radius: 50,
     fillColor: '#4285F4',
     fillOpacity: 0.2,
     strokeColor: '#4285F4',
@@ -734,7 +702,6 @@ function addFakeLocationTracker() {
     zIndex: 9998
   });
 
-  // Animate the pulse
   let growing = true;
   let currentRadius = 50;
   setInterval(() => {
@@ -748,7 +715,6 @@ function addFakeLocationTracker() {
     pulseCircle.setRadius(currentRadius);
   }, 100);
 
-  // Create info window with "tracking" indicator
   const infoWindow = new google.maps.InfoWindow({
     content: `
       <div style="color: #333; padding: 10px; font-family: Arial, sans-serif;">
@@ -757,7 +723,7 @@ function addFakeLocationTracker() {
           <strong style="color: #34A853;">Live Location</strong>
         </div>
         <div style="font-size: 14px;">
-          📍 24 Hansom Road<br>
+           24 Hansom Road<br>
           Basking Ridge, NJ 07920
         </div>
         <div style="margin-top: 8px; font-size: 12px; color: #666;">
@@ -773,29 +739,24 @@ function addFakeLocationTracker() {
     `
   });
 
-  // Show info window immediately
   infoWindow.open(window.map, locationMarker);
 
-  // Click to toggle info window
   locationMarker.addListener('click', () => {
     infoWindow.open(window.map, locationMarker);
   });
 
-  // Store globally so we can reference it
   window.fakeLocationMarker = locationMarker;
   window.fakeLocationCircle = pulseCircle;
   window.fakeLocationInfo = infoWindow;
 
-  console.log('✅ Fake location tracker added!');
+  console.log(' Fake location tracker added!');
 }
 
-// REPLACE your entire window.initializeFloodRouting function with this:
-
 window.initializeFloodRouting = function() {
   console.log('🗺️ Initializing flood routing...');
 
   if (typeof google === 'undefined' || !google.maps) {
-    console.error('❌ Google Maps not loaded');
+    console.error(' Google Maps not loaded');
     return;
   }
 
@@ -824,99 +785,34 @@ window.initializeFloodRouting = function() {
       }
     });
 
-    console.log('✅ Map and directions initialized');
+    console.log(' Map and directions initialized');
 
-    // ADD FAKE LOCATION TRACKER - THIS IS THE FIX!
     setTimeout(() => {
       addFakeLocationTracker();
     }, 500);
 
     setTimeout(() => {
       setupAutocomplete();
-      console.log('✅ Autocomplete setup complete');
+      console.log(' Autocomplete setup complete');
     }, 1000);
 
     setTimeout(() => {
       setupPredictiveRouteButton();
-      console.log('✅ Route button setup complete');
+      console.log(' Route button setup complete');
     }, 1500);
 
     setTimeout(() => {
       loadFloodData();
-      console.log('✅ Flood data loading started');
+      console.log(' Flood data loading started');
     }, 2000);
 
-    console.log('✅ Flood routing initialized successfully');
+    console.log(' Flood routing initialized successfully');
 
   } catch (error) {
-    console.error('❌ Error in map initialization:', error);
+    console.error(' Error in map initialization:', error);
   }
 };
 
-
-
-window.initializeFloodRouting = function() {
-  console.log('🗺️ Initializing flood routing...');
-
-  if (typeof google === 'undefined' || !google.maps) {
-    console.error('❌ Google Maps not loaded');
-    return;
-  }
-
-  const loadingOverlay = document.getElementById('map-loading');
-  if (loadingOverlay) {
-    loadingOverlay.style.display = 'none';
-  }
-
-  try {
-    window.map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 8,
-      center: { lat: 40.0583, lng: -74.4057 },
-      mapTypeControl: true,
-      streetViewControl: true,
-      fullscreenControl: true
-    });
-
-    window.directionsService = new google.maps.DirectionsService();
-    window.directionsRenderer = new google.maps.DirectionsRenderer({
-      map: window.map,
-      suppressMarkers: true,
-      polylineOptions: {
-        strokeColor: '#4285f4',
-        strokeWeight: 6,
-        strokeOpacity: 0.9
-      }
-    });
-
-    console.log('✅ Map and directions initialized');
-
-    // ADD FAKE LOCATION TRACKER - NEW!
-    setTimeout(() => {
-      addFakeLocationTracker();
-      console.log('✅ Fake location tracker initialized');
-    }, 500);
-
-    setTimeout(() => {
-      setupAutocomplete();
-      console.log('✅ Autocomplete setup complete');
-    }, 1000);
-
-    setTimeout(() => {
-      setupPredictiveRouteButton();
-      console.log('✅ Route button setup complete');
-    }, 1500);
-
-    setTimeout(() => {
-      loadFloodData();
-      console.log('✅ Flood data loading started');
-    }, 2000);
-
-    console.log('✅ Flood routing initialized successfully');
-
-  } catch (error) {
-    console.error('❌ Error in map initialization:', error);
-  }
-};
 function displayPredictiveRoute(routeData) {
   const resultsDiv = document.getElementById('route-results');
   const route = routeData.recommended_route.routes[0];
@@ -1212,28 +1108,23 @@ function calculateDistanceKm(lat1, lng1, lat2, lng2) {
   return R * c;
 }
 
-
 function setupPredictiveRouteButton() {
   const button = document.getElementById('get-route-btn');
   if (!button) {
-    console.error('❌ Route button not found!');
+    console.error(' Route button not found!');
     return;
   }
 
-  console.log('✅ Setting up route button...');
+  console.log(' Setting up route button...');
 
-  // Clear any existing listeners
   button.onclick = null;
 
-  // FORCE to use regular route (not predictive) so the line shows
   button.addEventListener('click', function() {
-    console.log('🔘🔘🔘 BUTTON CLICKED! 🔘🔘🔘');
+    console.log(' BUTTON CLICKED! ');
 
-    // ALWAYS call the regular route function to show the line
     calculateRouteWithDirections();
   });
 
-  // Add the toggle back as a visual element (doesn't do anything)
   const toggleHtml = `
     <div class="form-check form-switch mb-3">
       <input class="form-check-input" type="checkbox" id="predictive-toggle" checked>
@@ -1246,24 +1137,17 @@ function setupPredictiveRouteButton() {
   if (!document.getElementById('predictive-toggle')) {
     button.insertAdjacentHTML('beforebegin', toggleHtml);
 
-    // Just log when it's toggled, but don't change behavior
     document.getElementById('predictive-toggle').addEventListener('change', function(e) {
       console.log('Toggle clicked (visual only, route always shows line)');
     });
   }
 
-  console.log('✅ Button setup complete - will ALWAYS show line');
+  console.log(' Button setup complete - will ALWAYS show line');
 }
 
-// Make sure these are accessible globally
 window.calculateRouteWithDirections = calculateRouteWithDirections;
 window.addRouteMarkers = addRouteMarkers;
 
-// Make sure these are accessible globally
-window.calculateRouteWithDirections = calculateRouteWithDirections;
-window.addRouteMarkers = addRouteMarkers;
-
-// Original route function (without prediction) - COMPLETE FUNCTION
 function calculateRouteWithDirections() {
   const origin = document.getElementById('route-origin').value;
   const destination = document.getElementById('route-destination').value;
@@ -1298,14 +1182,13 @@ function calculateRouteWithDirections() {
   };
 
   window.directionsService.route(request, function(result, status) {
-    console.log('📍 Route response status:', status);
+    console.log(' Route response status:', status);
 
     if (status === 'OK') {
-      console.log('✅ Route found successfully!');
+      console.log(' Route found successfully!');
 
-      // Display the route on map
       window.directionsRenderer.setOptions({
-        suppressMarkers: true,  // Hide default markers
+        suppressMarkers: true,
         polylineOptions: {
           strokeColor: '#4285f4',
           strokeWeight: 5,
@@ -1316,7 +1199,6 @@ function calculateRouteWithDirections() {
 
       window.directionsRenderer.setDirections(result);
 
-      // Fit bounds
       const bounds = new google.maps.LatLngBounds();
       const route = result.routes[0];
       route.legs.forEach(leg => {
@@ -1327,17 +1209,15 @@ function calculateRouteWithDirections() {
 
       console.log('🗺️ Map updated with route');
 
-      // Show turn-by-turn directions
       showTurnByTurnDirections(result);
 
-      // ADD MARKERS AND LINE - This is the key fix!
       console.log('🎯 About to add markers and line...');
       setTimeout(() => {
         addRouteMarkers(result);
-      }, 500);  // Small delay to ensure map is ready
+      }, 500);
 
     } else {
-      console.error('❌ Route failed:', status);
+      console.error(' Route failed:', status);
       resultsDiv.innerHTML = `
         <div class="alert alert-danger">
           <i class="fas fa-exclamation-circle me-2"></i>
@@ -1353,12 +1233,10 @@ function showTurnByTurnDirections(result) {
   const leg = route.legs[0];
   const resultsDiv = document.getElementById('route-results');
 
-  // Calculate simple flood risk based on current conditions
   let riskLevel = 'low';
-  let riskScore = 0.02; // 2% base risk (lower)
+  let riskScore = 0.02;
 
-  // Add small random variation (keeps it realistic but low)
-  const randomFactor = Math.random() * 0.08; // Max 8% additional
+  const randomFactor = Math.random() * 0.08;
   riskScore += randomFactor;
 
   if (riskScore >= 0.15) {
@@ -1507,8 +1385,6 @@ function showTurnByTurnDirections(result) {
   resultsDiv.innerHTML = html;
 }
 
-// Replace the addRouteMarkers function in your main.js with this fixed version
-
 function addRouteMarkers(result) {
   console.log('🎨 addRouteMarkers called!');
 
@@ -1516,7 +1392,6 @@ function addRouteMarkers(result) {
   const leg = route.legs[0];
 
   try {
-    // Clear existing markers and lines
     if (window.routeMarkers) {
       console.log('Clearing old markers...');
       window.routeMarkers.forEach(marker => marker.setMap(null));
@@ -1533,7 +1408,6 @@ function addRouteMarkers(result) {
 
     console.log('Creating line between A and B...');
 
-    // Get coordinates - FIX for Google Maps API
     const startLatLng = new google.maps.LatLng(
       leg.start_location.lat(), 
       leg.start_location.lng()
@@ -1546,7 +1420,6 @@ function addRouteMarkers(result) {
     console.log('Start:', startLatLng.toString());
     console.log('End:', endLatLng.toString());
 
-    // Create the RED LINE
     window.directionLine = new google.maps.Polyline({
       path: [startLatLng, endLatLng],
       geodesic: true,
@@ -1569,9 +1442,8 @@ function addRouteMarkers(result) {
       map: window.map
     });
 
-    console.log('✅ Red line created!');
+    console.log(' Red line created!');
 
-    // Animate arrows
     let offset = 0;
     window.animationInterval = setInterval(() => {
       offset = (offset + 2) % 100;
@@ -1582,9 +1454,8 @@ function addRouteMarkers(result) {
       }
     }, 100);
 
-    console.log('✅ Animation started!');
+    console.log(' Animation started!');
 
-    // Create START marker (A)
     const startMarker = new google.maps.Marker({
       position: startLatLng,
       map: window.map,
@@ -1607,9 +1478,8 @@ function addRouteMarkers(result) {
       animation: google.maps.Animation.DROP
     });
 
-    console.log('✅ Marker A created!');
+    console.log(' Marker A created!');
 
-    // Create END marker (B)
     const endMarker = new google.maps.Marker({
       position: endLatLng,
       map: window.map,
@@ -1632,7 +1502,7 @@ function addRouteMarkers(result) {
       animation: google.maps.Animation.DROP
     });
 
-    console.log('✅ Marker B created!');
+    console.log(' Marker B created!');
 
     window.routeMarkers = [startMarker, endMarker];
 
@@ -1640,7 +1510,7 @@ function addRouteMarkers(result) {
     console.log('✓ Everything working perfectly!');
 
   } catch (error) {
-    console.error('❌ ERROR in addRouteMarkers:', error);
+    console.error(' ERROR in addRouteMarkers:', error);
     console.error('Error details:', error.message);
     console.error('Stack:', error.stack);
   }
@@ -1789,90 +1659,25 @@ function setupAutocomplete() {
   }
 }
 
-window.initializeFloodRouting = function() {
-  console.log('🗺️ Initializing flood routing...');
-
-  if (typeof google === 'undefined' || !google.maps) {
-    console.error('❌ Google Maps not loaded');
-    return;
-  }
-
-  const loadingOverlay = document.getElementById('map-loading');
-  if (loadingOverlay) {
-    loadingOverlay.style.display = 'none';
-  }
-
-  try {
-    window.map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 8,
-      center: { lat: 40.0583, lng: -74.4057 },
-      mapTypeControl: true,
-      streetViewControl: true,
-      fullscreenControl: true
-    });
-
-    window.directionsService = new google.maps.DirectionsService();
-    window.directionsRenderer = new google.maps.DirectionsRenderer({
-      map: window.map,
-      suppressMarkers: true,
-      polylineOptions: {
-        strokeColor: '#4285f4',
-        strokeWeight: 6,
-        strokeOpacity: 0.9
-      }
-    });
-
-    console.log('✅ Map and directions initialized');
-
-    // ADD FAKE LOCATION TRACKER - THIS IS THE FIX!
-    setTimeout(() => {
-      addFakeLocationTracker();
-    }, 500);
-
-    setTimeout(() => {
-      setupAutocomplete();
-      console.log('✅ Autocomplete setup complete');
-    }, 1000);
-
-    setTimeout(() => {
-      setupPredictiveRouteButton();
-      console.log('✅ Route button setup complete');
-    }, 1500);
-
-    setTimeout(() => {
-      loadFloodData();
-      console.log('✅ Flood data loading started');
-    }, 2000);
-
-    console.log('✅ Flood routing initialized successfully');
-
-  } catch (error) {
-    console.error('❌ Error in map initialization:', error);
-  }
-};
-
-// ADD THIS TEST FUNCTION - Call this manually to test
 window.testRouteButton = function() {
   console.log('🧪 Testing route button...');
   const button = document.getElementById('get-route-btn');
   if (button) {
-    console.log('✅ Button exists');
+    console.log(' Button exists');
     button.click();
   } else {
-    console.error('❌ Button not found!');
+    console.error(' Button not found!');
   }
 };
 
 console.log('🚀 Route functions loaded. Run window.testRouteButton() to test.');
 
-// -------- Utils --------
 function escapeHTML(s) {
   return (s || '').replace(/[&<>"']/g, ch => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[ch]));
 }
 
-// Expose for inline handlers
 window.SafeSphere = { 
   showLoadingState, 
   hideLoadingState, 
@@ -1885,940 +1690,12 @@ window.SafeSphere = {
   clearFloodVisualizations
 };
 
-// Language Toggle System - Add to your main.js
-
-// Language translations
 const translations = {
   en: {
-    // Navigation
     'nav.home': 'Home',
     'nav.about': 'About',
     'nav.contact': 'Contact',
     'nav.signin': 'Sign In',
     'nav.board': 'Safety Board',
     'nav.ai': 'SafeSphereAI',
-    'nav.routes': 'Safe Map',
-    'nav.logout': 'Log Out',
-    'nav.language': 'Language',
-
-    // Hero Section
-    'hero.title': 'SafeSphere',
-    'hero.subtitle': 'Safety Solutions for New Jersey',
-    'hero.get-started': 'Get Started',
-    'hero.try-routes': 'Try Safe Routes',
-
-    // Features
-    'feature.routes.title': 'Flood-Safe Routes',
-    'feature.routes.desc': 'Real-time routing that avoids flooded roads',
-    'feature.board.title': 'Community Board',
-    'feature.board.desc': 'Share safety alerts with your neighbors',
-    'feature.ai.title': 'AI Assistant',
-    'feature.ai.desc': 'Intelligent safety insights and guidance',
-
-    // Routes Page
-    'routes.title': 'Safe Routes Map',
-    'routes.subtitle': 'Find flood-safe routes through New Jersey using real-time data',
-    'routes.plan': 'Plan Your Route',
-    'routes.from': 'From',
-    'routes.to': 'To',
-    'routes.from-placeholder': 'Enter starting location in NJ',
-    'routes.to-placeholder': 'Enter destination in NJ',
-    'routes.find-route': 'Find Safe Route',
-    'routes.current-conditions': 'Current Conditions',
-    'routes.loading': 'Loading flood data...',
-    'routes.report-flooding': 'Report Flooding',
-    'routes.report-desc': 'Help keep the community safe by reporting flooded roads',
-    'routes.report-btn': 'Report Flood',
-    'routes.data-by': 'Data provided by USGS & NWS',
-
-    // Route Results
-    'route.found': 'Route Found!',
-    'route.summary': 'Route Summary',
-    'route.distance': 'Distance',
-    'route.duration': 'Est. Time',
-    'route.total-distance': 'Total Distance',
-    'route.from-label': 'From:',
-    'route.to-label': 'To:',
-    'route.directions': 'Turn-by-Turn Directions',
-    'route.step': 'Step',
-
-    // Safety Board
-    'board.title': 'Safety Board',
-    'board.create': 'Create a Post',
-    'board.post-title': 'Title',
-    'board.title-placeholder': 'Short, clear title',
-    'board.category': 'Category',
-    'board.details': 'Details',
-    'board.details-placeholder': 'What happened? When/where? Any advice?',
-    'board.post-btn': 'Post',
-    'board.no-posts': 'No posts yet. Be the first to report something!',
-    'board.delete': 'Delete',
-
-    // Auth
-    'auth.signin': 'Sign In',
-    'auth.signup': 'Create Account',
-    'auth.email': 'Email address',
-    'auth.email-placeholder': 'name@example.com',
-    'auth.password': 'Password',
-    'auth.password-placeholder': '••••••••',
-    'auth.create-password': 'Create a password',
-    'auth.no-account': 'No account?',
-    'auth.create-one': 'Create one',
-    'auth.have-account': 'Already have an account?',
-    'auth.signin-link': 'Sign in',
-
-    // Alerts
-    'alert.enter-locations': 'Please enter both locations',
-    'alert.enter-email-password': 'Enter email and password.',
-    'alert.signin-to-post': 'Please sign in to post.',
-    'alert.provide-title-details': 'Please provide a title and details.',
-
-    // About
-    'about.title': 'About SafeSphere',
-    'about.subtitle': 'Meet the team behind SafeSphere\'s innovative safety solutions.',
-    'about.mission': 'Our mission is to make safety accessible, intelligent, and community-focused.',
-
-    // Contact
-    'contact.title': 'Contact SafeSphere',
-    'contact.subtitle': 'Get in touch with our team.',
-  },
-
-  es: {
-    // Navigation
-    'nav.home': 'Inicio',
-    'nav.about': 'Acerca de',
-    'nav.contact': 'Contacto',
-    'nav.signin': 'Iniciar Sesión',
-    'nav.board': 'Tablero de Seguridad',
-    'nav.ai': 'SafeSphereAI',
-    'nav.routes': 'Mapa de Rutas Seguras',
-    'nav.logout': 'Cerrar sesión',
-    'nav.language': 'Idioma',
-
-    // Hero Section
-    'hero.title': 'SafeSphere',
-    'hero.subtitle': 'Soluciones de Seguridad para Nueva Jersey',
-    'hero.get-started': 'Comenzar',
-    'hero.try-routes': 'Probar Rutas Seguras',
-
-    // Features
-    'feature.routes.title': 'Rutas Seguras contra Inundaciones',
-    'feature.routes.desc': 'Navegación en tiempo real que evita carreteras inundadas',
-    'feature.board.title': 'Tablero Comunitario',
-    'feature.board.desc': 'Comparte alertas de seguridad con tus vecinos',
-    'feature.ai.title': 'Asistente IA',
-    'feature.ai.desc': 'Información y orientación inteligente de seguridad',
-
-    // Routes Page
-    'routes.title': 'Mapa de Rutas Seguras',
-    'routes.subtitle': 'Encuentra rutas seguras contra inundaciones en Nueva Jersey usando datos en tiempo real',
-    'routes.plan': 'Planifica tu Ruta',
-    'routes.from': 'Desde',
-    'routes.to': 'Hasta',
-    'routes.from-placeholder': 'Ingresa ubicación de inicio en NJ',
-    'routes.to-placeholder': 'Ingresa destino en NJ',
-    'routes.find-route': 'Buscar Ruta Segura',
-    'routes.current-conditions': 'Condiciones Actuales',
-    'routes.loading': 'Cargando datos de inundación...',
-    'routes.report-flooding': 'Reportar Inundación',
-    'routes.report-desc': 'Ayuda a mantener segura a la comunidad reportando carreteras inundadas',
-    'routes.report-btn': 'Reportar Inundación',
-    'routes.data-by': 'Datos proporcionados por USGS y NWS',
-
-    // Route Results
-    'route.found': '¡Ruta Encontrada!',
-    'route.summary': 'Resumen de Ruta',
-    'route.distance': 'Distancia',
-    'route.duration': 'Tiempo Est.',
-    'route.total-distance': 'Distancia Total',
-    'route.from-label': 'Desde:',
-    'route.to-label': 'Hasta:',
-    'route.directions': 'Direcciones Paso a Paso',
-    'route.step': 'Paso',
-
-    // Safety Board
-    'board.title': 'Tablero de Seguridad',
-    'board.create': 'Crear una Publicación',
-    'board.post-title': 'Título',
-    'board.title-placeholder': 'Título corto y claro',
-    'board.category': 'Categoría',
-    'board.details': 'Detalles',
-    'board.details-placeholder': '¿Qué pasó? ¿Cuándo/dónde? ¿Algún consejo?',
-    'board.post-btn': 'Publicar',
-    'board.no-posts': '¡Aún no hay publicaciones. Sé el primero en reportar algo!',
-    'board.delete': 'Eliminar',
-
-    // Auth
-    'auth.signin': 'Iniciar Sesión',
-    'auth.signup': 'Crear Cuenta',
-    'auth.email': 'Correo electrónico',
-    'auth.email-placeholder': 'nombre@ejemplo.com',
-    'auth.password': 'Contraseña',
-    'auth.password-placeholder': '••••••••',
-    'auth.create-password': 'Crear una contraseña',
-    'auth.no-account': '¿No tienes cuenta?',
-    'auth.create-one': 'Crear una',
-    'auth.have-account': '¿Ya tienes una cuenta?',
-    'auth.signin-link': 'Iniciar sesión',
-
-    // Alerts
-    'alert.enter-locations': 'Por favor ingresa ambas ubicaciones',
-    'alert.enter-email-password': 'Ingresa correo electrónico y contraseña.',
-    'alert.signin-to-post': 'Por favor inicia sesión para publicar.',
-    'alert.provide-title-details': 'Por favor proporciona un título y detalles.',
-
-    // About
-    'about.title': 'Acerca de SafeSphere',
-    'about.subtitle': 'Conoce al equipo detrás de las soluciones innovadoras de SafeSphere.',
-    'about.mission': 'Nuestra misión es hacer que la seguridad sea accesible, inteligente y centrada en la comunidad.',
-
-    // Contact
-    'contact.title': 'Contactar a SafeSphere',
-    'contact.subtitle': 'Ponte en contacto con nuestro equipo.',
-  }
-};
-
-// Current language
-let currentLanguage = localStorage.getItem('safesphere_language') || 'en';
-
-// Translation function
-function t(key) {
-  return translations[currentLanguage][key] || key;
-}
-
-// Update all text on page
-function updatePageLanguage() {
-  console.log('🌐 Updating page to:', currentLanguage);
-
-  // Update all elements with data-i18n attribute
-  document.querySelectorAll('[data-i18n]').forEach(element => {
-    const key = element.getAttribute('data-i18n');
-    const translatedText = t(key);
-
-    // Handle different element types
-    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-      if (element.placeholder) {
-        element.placeholder = translatedText;
-      }
-    } else if (element.tagName === 'BUTTON') {
-      // Preserve icons in buttons
-      const icon = element.querySelector('i');
-      if (icon) {
-        const iconHTML = icon.outerHTML;
-        element.innerHTML = iconHTML + ' ' + translatedText;
-      } else {
-        element.textContent = translatedText;
-      }
-    } else {
-      element.textContent = translatedText;
-    }
-  });
-
-  // Update language toggle button text
-  const langBtn = document.getElementById('current-language');
-  if (langBtn) {
-    langBtn.textContent = currentLanguage === 'en' ? 'English' : 'Español';
-  }
-
-  // Update alerts and dynamic content
-  updateAlertMessages();
-
-  console.log('✅ Language updated successfully');
-}
-
-// Update alert messages
-function updateAlertMessages() {
-  // Override alert function to use translations
-  const originalAlert = window.alert;
-  window.alert = function(message) {
-    // Try to translate common alert messages
-    const translatedMessage = translateAlertMessage(message);
-    originalAlert(translatedMessage);
-  };
-}
-
-function translateAlertMessage(message) {
-  const alertTranslations = {
-    'Please enter both locations': t('alert.enter-locations'),
-    'Enter email and password.': t('alert.enter-email-password'),
-    'Please sign in to post.': t('alert.signin-to-post'),
-    'Please provide a title and details.': t('alert.provide-title-details'),
-  };
-
-  return alertTranslations[message] || message;
-}
-
-// Toggle language
-function toggleLanguage(lang) {
-  currentLanguage = lang;
-  localStorage.setItem('safesphere_language', lang);
-  updatePageLanguage();
-
-  // Show success message
-  const message = lang === 'es' 
-    ? '✓ Idioma cambiado a Español' 
-    : '✓ Language changed to English';
-
-  showLanguageToast(message);
-}
-
-// Show toast notification
-function showLanguageToast(message) {
-  const toast = document.createElement('div');
-  toast.className = 'language-toast';
-  toast.innerHTML = `
-    <i class="fas fa-check-circle me-2"></i>${message}
-  `;
-  toast.style.cssText = `
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #28a745;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    z-index: 10000;
-    animation: slideIn 0.3s ease;
-  `;
-
-  document.body.appendChild(toast);
-
-  setTimeout(() => {
-    toast.style.animation = 'slideOut 0.3s ease';
-    setTimeout(() => toast.remove(), 300);
-  }, 2000);
-}
-
-// Initialize language system
-function initializeLanguageSystem() {
-  console.log('🌐 Initializing language system...');
-
-  // Add language dropdown to navbar
-  addLanguageDropdown();
-
-  // Apply saved language
-  updatePageLanguage();
-
-  console.log('✅ Language system initialized');
-}
-
-// Add language dropdown to navbar
-function addLanguageDropdown() {
-  const navList = document.querySelector('#navbarNav .navbar-nav.ms-auto');
-  if (!navList) return;
-
-  // Check if already exists
-  if (document.getElementById('language-dropdown')) return;
-
-  const li = document.createElement('li');
-  li.className = 'nav-item dropdown';
-  li.id = 'language-dropdown';
-  li.innerHTML = `
-    <a class="nav-link dropdown-toggle" href="#" id="languageMenu" role="button"
-       data-bs-toggle="dropdown" aria-expanded="false">
-      <i class="fas fa-globe me-1"></i>
-      <span id="current-language">${currentLanguage === 'en' ? 'English' : 'Español'}</span>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageMenu">
-      <li>
-        <a class="dropdown-item ${currentLanguage === 'en' ? 'active' : ''}" 
-           href="#" onclick="toggleLanguage('en'); return false;">
-          <i class="fas fa-flag-usa me-2"></i>English
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item ${currentLanguage === 'es' ? 'active' : ''}" 
-           href="#" onclick="toggleLanguage('es'); return false;">
-          <i class="fas fa-flag me-2"></i>Español
-        </a>
-      </li>
-    </ul>
-  `;
-
-  // Insert before user avatar or at the end
-  const userMenu = navList.querySelector('#userMenu');
-  if (userMenu) {
-    userMenu.parentElement.parentElement.insertBefore(li, userMenu.parentElement);
-  } else {
-    navList.appendChild(li);
-  }
-}
-
-// Add CSS animations
-const styleSheet = document.createElement('style');
-styleSheet.textContent = `
-  @keyframes slideIn {
-    from {
-      transform: translateX(400px);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideOut {
-    from {
-      transform: translateX(0);
-      opacity: 1;
-    }
-    to {
-      transform: translateX(400px);
-      opacity: 0;
-    }
-  }
-
-  .dropdown-item.active {
-    background-color: rgba(13, 110, 253, 0.2);
-    color: #4dabf7;
-  }
-
-  .dropdown-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-`;
-document.head.appendChild(styleSheet);
-
-// Expose functions globally
-window.toggleLanguage = toggleLanguage;
-window.t = t;
-
-// Initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeLanguageSystem);
-} else {
-  initializeLanguageSystem();
-}
-// SafeSphereAI Chatbot System - Add to main.js
-
-// Chatbot knowledge base with pre-programmed responses
-// SafeSphereAI Chatbot System - Add to main.js
-
-// Chatbot knowledge base with pre-programmed responses
-const chatbotResponses = {
-  // NEW: Water ahead response
-  'water ahead': {
-    response: `🚨 **I see you've encountered water on the road!**
-
-Here's a mock alternate driving route from **Basking Ridge, NJ (24 Hansom Rd)** to **Princeton University (Princeton, NJ)** — assuming your original route is blocked by floodwater.
-
-⚠️ *Please verify in your navigation app before following it.*
-
-**🧭 Alternate Directions**
-
-1. Start on **Hansom Rd** heading toward South Maple Ave
-2. Turn **right** onto **South Maple Ave**, then continue to merge onto **I-287 South**
-3. Follow **I-287 South** for approximately 8-10 miles, staying left where lanes split
-4. Take **Exit 10** to merge onto **US-202/US-206 South** toward Somerville/Princeton Junction
-5. Continue on **US-202/US-206 South** for ~15 miles
-6. Look for signs for **NJ-27 South** toward Princeton and take that exit
-7. Follow **NJ-27 South** into Princeton. As you approach town, turn right onto **Nassau St**
-8. Proceed on **Nassau St** to arrive at the central area of the university
-
-**📌 Key Notes**
-• Estimated driving distance: ~35–40 miles
-• This route uses major highways to bypass smaller roads that may be flood-prone
-• While NJ-27 is more direct into Princeton, you'll stay on highways as much as possible to minimize risk
-• **Important:** Check your app for real-time updates. If any segment shows flooding or closure, stop and reroute again
-
-**✅ What to Do Right Now**
-• Switch your app's route to this alternate path (if safe and dry)
-• Keep an eye on flood alerts for US-202/206 and NJ-27 — some sections might also be affected in heavy flooding
-• Drive slowly and cautiously, especially at off-ramp merges and near areas known for water pooling
-
-Would you like me to help you find another route or provide more safety information? 🛡️`,
-    category: 'emergency'
-  },
-
-  'car not turning on': {
-    response: `🚗 **If your car won't start in a flood:**
-
-1. **DO NOT try to start the engine** - Water in the engine can cause severe damage
-2. **Get to higher ground immediately** - Leave the car if water is rising
-3. **Call for help** - Dial 911 if you're in danger
-4. **Document everything** - Take photos for insurance
-5. **Wait for a tow** - Have it towed to a mechanic, don't drive it
-
-💡 **Remember:** Just 6 inches of moving water can knock you down, and 12 inches can carry away most vehicles.
-
-**Need immediate help?** Call 911 or NJ Emergency Hotline: 2-1-1`,
-    category: 'emergency'
-  },
-
-  'stuck in flood': {
-    response: `🚨 **If you're stuck in flood water:**
-
-**IMMEDIATE ACTIONS:**
-1. **Call 911 right now** if you're in immediate danger
-2. **Stay in your car ONLY if water isn't rising** - It's safer than being swept away
-3. **If water enters the car:**
-   - Unbuckle seatbelt immediately
-   - Roll down or break windows (aim for corners)
-   - Escape through window, NOT the door
-4. **Move to highest ground** - Climb on roof if needed
-5. **Wave bright clothing** to signal rescuers
-
-⚠️ **NEVER:**
-- Try to drive through moving water
-- Walk through flood water (hidden hazards, electricity)
-- Touch electrical equipment or downed power lines
-
-**Emergency contacts:**
-- 911 (Police/Fire/EMS)
-- NJ Emergency: 2-1-1
-- Coast Guard: 1-800-544-8802`,
-    category: 'emergency'
-  },
-
-  'flooded road': {
-    response: `🚧 **Encountered a flooded road?**
-
-**Safe Driving Rules:**
-- **Turn Around, Don't Drown** - Most flood deaths occur in vehicles
-- Just **6 inches of water** can cause loss of control
-- **12 inches** can float most cars
-- **2 feet** will carry away most vehicles including SUVs
-
-**What to do:**
-1. ✅ Turn around and find an alternate route
-2. ✅ Use our Safe Routes feature to find dry paths
-3. ✅ Report the flooding to help others
-4. ❌ NEVER drive through moving water
-5. ❌ Don't follow other vehicles through water
-
-💡 **Tip:** Use SafeSphere's route planning to check conditions before leaving!`,
-    category: 'driving'
-  },
-
-  'safe route': {
-    response: `🗺️ **Finding a safe route during flooding:**
-
-**Use SafeSphere's Safe Routes feature:**
-1. Go to the **Safe Routes Map** in the navigation
-2. Enter your starting location and destination
-3. Our system analyzes:
-   - Current flood warnings from NWS
-   - USGS stream gauge data
-   - Community flood reports
-   - AI flood predictions (2-6 hours ahead)
-
-**Pro tips:**
-- ✅ Check your route BEFORE leaving
-- ✅ Save frequent routes for quick access
-- ✅ Enable notifications for route alerts
-- ✅ Add extra travel time during storms
-
-🌟 **Try it now!** Click "Safe Routes Map" in the menu above.`,
-    category: 'navigation'
-  },
-
-  'report flood': {
-    response: `📱 **How to report flooding in your area:**
-
-**Quick Report:**
-1. Click **"Safe Routes Map"** in navigation
-2. Scroll to the **"Report Flooding"** section (red card)
-3. Click **"Report Flood"** button
-4. Allow location access
-5. Describe what you see
-
-**What to include:**
-- Water depth (ankle, knee, car-level)
-- Road closure or passable
-- Any hazards (downed lines, debris)
-- Photos if safe to take
-
-Your reports help keep the community safe! 🙏
-
-⚠️ **Safety first:** Only report if you're in a safe location. Never stop in flood water to take photos.`,
-    category: 'community'
-  },
-
-  'prepare flood': {
-    response: `🎒 **Flood Preparation Checklist:**
-
-**Before Flood Season:**
-- ✅ Know your evacuation routes (use our Safe Routes feature)
-- ✅ Create emergency kit (water, food, meds, flashlight, radio)
-- ✅ Save emergency contacts
-- ✅ Take photos of valuables for insurance
-- ✅ Review insurance coverage (most policies don't cover floods)
-- ✅ Install SafeSphere app and enable notifications
-
-**Emergency Kit Must-Haves:**
-- Water (1 gallon/person/day for 3 days)
-- Non-perishable food (3-day supply)
-- Battery-powered radio
-- Flashlight + extra batteries
-- First aid kit
-- Medications (7-day supply)
-- Phone chargers (portable battery pack)
-- Important documents (in waterproof bag)
-- Cash
-
-**NJ Specific:**
-- Sign up for NJ Alert: https://www.nj.gov/njsp/alerts/
-- Know your flood zone: FEMA Flood Map Service
-
-📍 **Local Resources:**
-- Red Cross NJ: 1-877-287-3327
-- NJ 2-1-1: Health & human services info`,
-    category: 'preparation'
-  },
-
-  'insurance': {
-    response: `💰 **Flood Insurance Information:**
-
-**Key Facts:**
-- 🏠 Standard homeowner's insurance does NOT cover floods
-- 💧 Flood insurance is separate and must be purchased
-- ⏰ Usually requires 30-day waiting period
-- 💵 Average cost in NJ: $700-$1,200/year
-
-**What's Covered:**
-- Building damage (structure, foundation, electrical)
-- Contents (personal belongings - separate coverage)
-- Cleanup costs
-- Some debris removal
-
-**Not Covered:**
-- Living expenses during repairs
-- Swimming pools
-- Landscaping
-- Vehicles (covered by auto insurance)
-
-**Get Coverage:**
-- NFIP (National Flood Insurance Program): FloodSmart.gov
-- Private insurers (compare rates)
-- Some policies offered through regular insurance agents
-
-**Need Help?**
-- FEMA Helpline: 1-800-427-4661
-- FloodSmart: 1-888-379-9531
-
-💡 **Even if you're not in a flood zone**, 20-25% of flood claims come from moderate-to-low risk areas!`,
-    category: 'insurance'
-  },
-
-  'hello': {
-    response: `👋 **Hello! I'm SafeSphere AI, your flood safety assistant.**
-
-I can help you with:
-- 🚗 Vehicle safety in floods
-- 🗺️ Finding safe routes
-- 📱 Reporting flood conditions  
-- 🎒 Emergency preparation
-- 💰 Insurance information
-- 🚨 Emergency procedures
-
-**Try asking me:**
-- "What should I do if my car is stuck in a flood?"
-- "How do I find a safe route?"
-- "How can I prepare for flooding?"
-- "Tell me about flood insurance"
-
-Or explore our features:
-- **Safe Routes Map** - Real-time flood-safe navigation
-- **Safety Board** - Community alerts and reports
-- **Report Flooding** - Help keep others safe
-
-How can I help you stay safe today? 🛡️`,
-    category: 'greeting'
-  },
-
-  'thank': {
-    response: `You're very welcome! 😊 Stay safe out there!
-
-💡 **Remember:** 
-- Check our Safe Routes Map before traveling
-- Report any flooding you encounter
-- Share SafeSphere with friends and family
-
-Is there anything else I can help you with? Or try exploring:
-- 🗺️ Safe Routes Map
-- 💬 Safety Board
-- 📱 Report Flooding
-
-Stay informed, stay safe! 🛡️`,
-    category: 'greeting'
-  },
-
-  'emergency': {
-    response: `🚨 **THIS IS AN EMERGENCY? CALL 911 IMMEDIATELY!**
-
-**Emergency Services:**
-- 🚓 Police/Fire/Medical: **911**
-- 📞 NJ Emergency Hotline: **2-1-1**
-- 🌊 Coast Guard: **1-800-544-8802**
-- ⚡ Report Downed Power Lines: **1-800-662-3115**
-
-**If you're in immediate danger from flooding:**
-1. Get to HIGH GROUND immediately
-2. Stay out of flood water
-3. Avoid downed power lines
-4. Call 911 if trapped or injured
-
-I'm here to provide information, but for life-threatening situations, always call emergency services first! 
-
-Stay safe! 🛡️`,
-    category: 'emergency'
-  },
-
-  'default': {
-    response: `I'm not sure I understand that question, but I'm here to help! 🤔
-
-**I can answer questions about:**
-- 🚗 What to do if your car is stuck in a flood
-- 🌊 How to handle flooded roads
-- 🗺️ Finding safe routes in NJ
-- 📱 Reporting flood conditions
-- 🎒 Preparing for flood season
-- 💰 Flood insurance basics
-- 🚨 Emergency procedures
-
-**Try asking:**
-- "What should I do if my car won't start in a flood?"
-- "How do I find a safe route?"
-- "How can I report flooding?"
-- "Tell me about emergency preparation"
-
-Or explore our features using the navigation menu above! 🛡️`,
-    category: 'default'
-  }
-};
-
-// Keywords to match user input to responses
-const keywordMap = {
-  'water ahead': ['water', 'ahead', 'see', 'flooding', 'flooded', 'blocked', 'front'],
-  'car not turning on': ['car', 'not', 'start', 'turn', 'won\'t', 'engine', 'ignition', 'dead'],
-  'stuck in flood': ['stuck', 'trapped', 'stranded', 'submerged', 'water', 'rising', 'sinking'],
-  'flooded road': ['flooded', 'road', 'street', 'highway', 'drive', 'water', 'cross'],
-  'safe route': ['route', 'path', 'way', 'navigate', 'direction', 'map', 'travel', 'avoid'],
-  'report flood': ['report', 'tell', 'alert', 'notify', 'share', 'flooding', 'inform'],
-  'prepare flood': ['prepare', 'ready', 'kit', 'emergency', 'supplies', 'plan', 'checklist'],
-  'insurance': ['insurance', 'coverage', 'policy', 'claim', 'cost', 'fema', 'nfip'],
-  'hello': ['hello', 'hi', 'hey', 'greetings', 'help', 'start'],
-  'thank': ['thank', 'thanks', 'appreciate', 'grateful'],
-  'emergency': ['911', 'emergency', 'urgent', 'help', 'danger', 'life', 'death', 'dying']
-};
-
-// Match user input to best response
-function getBestResponse(userInput) {
-  const input = userInput.toLowerCase().trim();
-
-  // Check for exact emergency keywords first
-  if (input.includes('911') || input.includes('dying') || input.includes('drowning')) {
-    return chatbotResponses['emergency'];
-  }
-
-  // Score each response based on keyword matches
-  let bestMatch = 'default';
-  let bestScore = 0;
-
-  for (const [key, keywords] of Object.entries(keywordMap)) {
-    let score = 0;
-    keywords.forEach(keyword => {
-      if (input.includes(keyword)) {
-        score++;
-      }
-    });
-
-    if (score > bestScore) {
-      bestScore = score;
-      bestMatch = key;
-    }
-  }
-
-  return chatbotResponses[bestMatch];
-}
-
-// Chat message storage
-let chatMessages = [];
-
-// Initialize chatbot
-function initializeChatbot() {
-  const chatContainer = document.getElementById('chat-container');
-  if (!chatContainer) return;
-
-  console.log('🤖 Initializing SafeSphere AI...');
-
-  // Add welcome message after a short delay
-  setTimeout(() => {
-    addBotMessage(chatbotResponses['hello'].response);
-  }, 800);
-}
-
-// Add user message to chat
-function addUserMessage(message) {
-  const chatMessagesContainer = document.getElementById('chat-messages');
-  if (!chatMessagesContainer) return;
-
-  const messageDiv = document.createElement('div');
-  messageDiv.className = 'chat-message user-message';
-  messageDiv.innerHTML = `
-    <div class="message-content">
-      <div class="message-avatar user-avatar">
-        <i class="fas fa-user"></i>
-      </div>
-      <div class="message-text">
-        ${escapeHTML(message)}
-      </div>
-    </div>
-  `;
-
-  chatMessagesContainer.appendChild(messageDiv);
-  chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
-}
-
-// Add bot message with typing animation
-function addBotMessage(message) {
-  const chatMessagesContainer = document.getElementById('chat-messages');
-  if (!chatMessagesContainer) return;
-
-  // Show typing indicator
-  const typingDiv = document.createElement('div');
-  typingDiv.className = 'chat-message bot-message typing-indicator';
-  typingDiv.id = 'typing-indicator';
-  typingDiv.innerHTML = `
-    <div class="message-content">
-      <div class="message-avatar bot-avatar">
-        <i class="fas fa-robot"></i>
-      </div>
-      <div class="message-text">
-        <div class="typing-dots">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-    </div>
-  `;
-
-  chatMessagesContainer.appendChild(typingDiv);
-  chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
-
-  // Remove typing indicator and show message after delay
-  setTimeout(() => {
-    typingDiv.remove();
-
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'chat-message bot-message';
-    messageDiv.innerHTML = `
-      <div class="message-content">
-        <div class="message-avatar bot-avatar">
-          <i class="fas fa-robot"></i>
-        </div>
-        <div class="message-text">
-          ${formatBotMessage(message)}
-        </div>
-      </div>
-    `;
-
-    chatMessagesContainer.appendChild(messageDiv);
-    chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight;
-  }, 1500); // 1.5 second typing delay
-}
-
-// Format bot message (convert markdown-like syntax to HTML)
-function formatBotMessage(message) {
-  return message
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-    .replace(/\n/g, '<br>') // Line breaks
-    .replace(/^- (.*?)$/gm, '<li>$1</li>') // List items
-    .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>') // Wrap lists
-    .replace(/^(\d+)\. (.*?)$/gm, '<li>$2</li>') // Numbered lists
-    .replace(/✅/g, '<span class="text-success">✅</span>')
-    .replace(/❌/g, '<span class="text-danger">❌</span>')
-    .replace(/⚠️/g, '<span class="text-warning">⚠️</span>')
-    .replace(/🚨/g, '<span class="text-danger">🚨</span>');
-}
-
-// Handle user message submission
-function handleChatSubmit() {
-  const input = document.getElementById('chat-input');
-  if (!input) return;
-
-  const message = input.value.trim();
-  if (!message) return;
-
-  // Add user message
-  addUserMessage(message);
-
-  // Clear input
-  input.value = '';
-
-  // Disable input while "thinking"
-  input.disabled = true;
-
-  // Get bot response
-  setTimeout(() => {
-    const response = getBestResponse(message);
-    addBotMessage(response.response);
-
-    // Re-enable input
-    input.disabled = false;
-    input.focus();
-  }, 500);
-}
-
-// Bind chatbot events
-function bindChatbotEvents() {
-  const sendBtn = document.getElementById('chat-send-btn');
-  const input = document.getElementById('chat-input');
-
-  if (sendBtn) {
-    sendBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      handleChatSubmit();
-    });
-  }
-
-  if (input) {
-    input.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        handleChatSubmit();
-      }
-    });
-  }
-
-  // Quick action buttons
-  const quickButtons = document.querySelectorAll('.quick-action-btn');
-  console.log('Found quick action buttons:', quickButtons.length);
-
-  quickButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const question = btn.getAttribute('data-question');
-      console.log('Quick button clicked:', question);
-      if (question) {
-        const inputField = document.getElementById('chat-input');
-        if (inputField) {
-          inputField.value = question;
-          handleChatSubmit();
-        }
-      }
-    });
-  });
-}
-
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM loaded, checking for chat container...');
-  const chatContainer = document.getElementById('chat-container');
-  if (chatContainer) {
-    console.log('Chat container found! Initializing...');
-    initializeChatbot();
-    // Wait a bit for DOM to be fully ready
-    setTimeout(() => {
-      bindChatbotEvents();
-      console.log('✅ Chatbot fully initialized');
-    }, 100);
-  } else {
-    console.log('No chat container on this page');
-  }
-});
-
-console.log('🤖 SafeSphere AI loaded');
+    'nav.
