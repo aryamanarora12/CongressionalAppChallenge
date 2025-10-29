@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}SafeSphere - Safety Solutions for New Jersey{% endblock %}</title>
+
+  <!-- Bootstrap CSS with Replit dark theme -->
+  <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+
+  <!-- Font Awesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="SafeSphere - Safety Solutions for New Jersey">
+  <meta name="keywords" content="safety, solutions, new jersey, nj, safesphere">
+  <meta name="author" content="SafeSphere">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold fs-3 d-flex align-items-center" href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='images/unnamed.png') }}" 
+             alt="SafeSphere Logo" 
+             style="height: 45px; width: auto; margin-right: 12px; border-radius: 8px;">
+        SafeSphere
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link {{ 'active' if not active_page else '' }} d-flex align-items-center" href="{{ url_for('index') }}">
+              <i class="fas fa-home me-2"></i><span data-i18n="nav.home">Home</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ 'active' if active_page == 'about' else '' }} d-flex align-items-center" href="{{ url_for('about') }}">
+              <i class="fas fa-info-circle me-2"></i><span data-i18n="nav.about">About</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ 'active' if active_page == 'contact' else '' }} d-flex align-items-center" href="{{ url_for('contact') }}">
+              <i class="fas fa-envelope me-2"></i><span data-i18n="nav.contact">Contact</span>
+            </a>
+          </li>
+          {% if not session.get('user') %}
+          <li class="nav-item">
+            <a id="nav-signin" class="nav-link {{ 'active' if active_page == 'signin' else '' }} d-flex align-items-center" href="{{ url_for('login_page') }}">
+              <i class="fas fa-right-to-bracket me-2"></i><span data-i18n="nav.signin">Sign In</span>
+            </a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link {{ 'active' if active_page == 'board' else '' }} d-flex align-items-center" href="{{ url_for('board_page') }}">
+              <i class="fas fa-comments me-2"></i><span data-i18n="nav.board">Safety Board</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ 'active' if active_page == 'ai' else '' }} d-flex align-items-center" href="{{ url_for('ai') }}">
+              <i class="fas fa-robot me-2"></i><span data-i18n="nav.ai">SafeSphereAI</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {{ 'active' if active_page == 'routes' else '' }} d-flex align-items-center text-nowrap" href="{{ url_for('routes') }}">
+              <i class="fas fa-route me-2"></i><span data-i18n="nav.routes">Safe Routes</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main>
+    {% if active_page == 'about' %}
+    <!-- About Section -->
+    <section class="hero-section d-flex align-items-start" style="padding-top: 8rem;">
+      <div class="container text-center">
+        <h1 class="display-2 fw-bold mb-3" data-i18n="about.title">About SafeSphere</h1>
+        <p class="lead mb-2" data-i18n="about.subtitle">Meet the team behind SafeSphere's innovative safety solutions.</p>
+        <p class="text-muted" data-i18n="about.mission">Our mission is to make safety accessible, intelligent, and community-focused.</p>
+      </div>
+    </section>
+
+    {% elif active_page == 'contact' %}
+    <!-- Contact Section -->
+    <section class="hero-section d-flex align-items-center">
+      <div class="container text-center">
+        <h1 class="display-2 fw-bold mb-4" data-i18n="contact.title">Contact SafeSphere</h1>
+        <p class="lead mb-4" data-i18n="contact.subtitle">Get in touch with our team.</p>
+        <p class="text-muted">orangekevchen@gmail.com, aryamanaroranj@gmail.com</p>
+      </div>
+    </section>
+
+    {% elif active_page == 'signin' %}
+    <!-- Sign In Section -->
+    <section class="hero-section d-flex align-items-center">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-8 col-lg-6">
+            <h1 class="fw-bold mb-4 text-center">
+              <i class="fas fa-right-to-bracket me-2"></i><span data-i18n="auth.signin">Sign In</span>
+            </h1>
+            <div class="card bg-dark border-0 shadow-lg p-4">
+              <form onsubmit="return false;">
+                <div class="mb-3">
+                  <label for="email" class="form-label" data-i18n="auth.email">Email address</label>
+                  <input type="email" class="form-control" id="email" data-i18n="auth.email-placeholder" placeholder="name@example.com" required>
+                </div>
+                <div class="mb-3">
+                  <label for="password" class="form-label" data-i18n="auth.password">Password</label>
+                  <input type="password" class="form-control" id="password" data-i18n="auth.password-placeholder" placeholder="••••••••" required>
+                </div>
+                <button type="button" id="signin-btn" class="btn btn-primary w-100" data-i18n="auth.signin">Sign In</button>
+                <p class="text-muted mt-3 mb-0 text-center">
+                  <span data-i18n="auth.no-account">No account?</span> <a href="{{ url_for('signup_page') }}" class="link-light" data-i18n="auth.create-one">Create one</a>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% elif active_page == 'signup' %}
+    <!-- Sign Up Section -->
+    <section class="hero-section d-flex align-items-center">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-8 col-lg-6">
+            <h1 class="fw-bold mb-4 text-center">
+              <i class="fas fa-user-plus me-2"></i><span data-i18n="auth.signup">Create Account</span>
+            </h1>
+            <div class="card bg-dark border-0 shadow-lg p-4">
+              <form onsubmit="return false;">
+                <div class="mb-3">
+                  <label for="signup-email" class="form-label" data-i18n="auth.email">Email address</label>
+                  <input type="email" class="form-control" id="signup-email" data-i18n="auth.email-placeholder" placeholder="name@example.com" required>
+                </div>
+                <div class="mb-3">
+                  <label for="signup-password" class="form-label" data-i18n="auth.password">Password</label>
+                  <input type="password" class="form-control" id="signup-password" data-i18n="auth.create-password" placeholder="Create a password" required minlength="6">
+                </div>
+                <button type="button" id="signup-btn" class="btn btn-success w-100" data-i18n="auth.signup">Create Account</button>
+                <p class="text-muted mt-3 mb-0 text-center">
+                  <span data-i18n="auth.have-account">Already have an account?</span> <a href="{{ url_for('login_page') }}" class="link-light" data-i18n="auth.signin-link">Sign in</a>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% elif active_page == 'board' %}
+    <!-- Safety Board -->
+    <section class="py-5 hero-section">
+      <div class="container">
+        <h1 class="fw-bold mb-4 text-center">
+          <i class="fas fa-comments me-2"></i><span data-i18n="board.title">Safety Board</span>
+        </h1>
+
+        <!-- Create Post -->
+        <div class="card bg-dark border-0 shadow-lg mb-4">
+          <div class="card-body">
+            <h5 class="card-title mb-3" data-i18n="board.create">Create a Post</h5>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label" for="sb-title" data-i18n="board.post-title">Title</label>
+                <input id="sb-title" type="text" class="form-control" data-i18n="board.title-placeholder" placeholder="Short, clear title">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="sb-category" data-i18n="board.category">Category</label>
+                <select id="sb-category" class="form-select">
+                  <option>General</option>
+                  <option>Incident</option>
+                  <option>Road Closure</option>
+                  <option>Weather</option>
+                  <option>Missing Item</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label" for="sb-body" data-i18n="board.details">Details</label>
+                <textarea id="sb-body" class="form-control" rows="3" data-i18n="board.details-placeholder" placeholder="What happened? When/where? Any advice?"></textarea>
+              </div>
+              <div class="col-12 d-flex justify-content-end">
+                <button id="sb-post-btn" class="btn btn-primary">
+                  <i class="fas fa-paper-plane me-2"></i><span data-i18n="board.post-btn">Post</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Posts List -->
+        <div id="sb-list" class="d-flex flex-column gap-3"></div>
+      </div>
+    </section>
+
+    {% elif active_page == 'ai' %}
+    <!-- SafeSphereAI Section -->
+    <section class="ai-section py-5">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-10 col-xl-8">
+
+            <!-- Header -->
+            <div class="text-center mb-4">
+              <h1 class="display-4 fw-bold mb-3">
+                <i class="fas fa-robot me-2 text-primary"></i>SafeSphere AI
+              </h1>
+              <p class="lead text-muted">Your intelligent flood safety assistant</p>
+              <div class="alert alert-info d-inline-block">
+                <i class="fas fa-shield-alt me-2"></i>
+                Powered by advanced flood safety knowledge • Available 24/7
+              </div>
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <button class="quick-action-btn btn btn-outline-primary w-100" data-question="What should I do if my car is stuck in a flood?">
+                  <i class="fas fa-car me-2"></i>Car Stuck in Flood
+                </button>
+              </div>
+              <div class="col-md-6">
+                <button class="quick-action-btn btn btn-outline-primary w-100" data-question="How do I find a safe route?">
+                  <i class="fas fa-route me-2"></i>Find Safe Routes
+                </button>
+              </div>
+              <div class="col-md-6">
+                <button class="quick-action-btn btn btn-outline-primary w-100" data-question="How can I prepare for flooding?">
+                  <i class="fas fa-box me-2"></i>Flood Preparation
+                </button>
+              </div>
+              <div class="col-md-6">
+                <button class="quick-action-btn btn btn-outline-primary w-100" data-question="Tell me about flood insurance">
+                  <i class="fas fa-file-invoice-dollar me-2"></i>Flood Insurance
+                </button>
+              </div>
+            </div>
+
+            <!-- Chat Container -->
+            <div id="chat-container" class="card bg-dark border-0 shadow-lg">
+              <div class="card-header bg-primary text-white">
+                <div class="d-flex align-items-center">
+                  <div class="bot-avatar-header me-3">
+                    <i class="fas fa-robot fa-2x"></i>
+                  </div>
+                  <div>
+                    <h5 class="mb-0">SafeSphere AI</h5>
+                    <small class="opacity-75">
+                      <i class="fas fa-circle text-success me-1" style="font-size: 8px;"></i>
+                      Online and ready to help
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-body p-0">
+                <!-- Chat Messages Area -->
+                <div id="chat-messages" class="chat-messages">
+                  <!-- Messages will be added here dynamically -->
+                </div>
+              </div>
+
+              <!-- Chat Input -->
+              <div class="card-footer bg-dark border-top">
+                <div class="input-group">
+                  <input 
+                    type="text" 
+                    id="chat-input" 
+                    class="form-control" 
+                    placeholder="Ask me about flood safety..."
+                    autocomplete="off"
+                  >
+                  <button class="btn btn-primary" type="button" id="chat-send-btn">
+                    <i class="fas fa-paper-plane me-2"></i>Send
+                  </button>
+                </div>
+                <small class="text-muted d-block mt-2">
+                  <i class="fas fa-info-circle me-1"></i>
+                  Press Enter to send • This AI provides safety information based on NJ flood guidelines
+                </small>
+              </div>
+            </div>
+
+            <!-- Disclaimer -->
+            <div class="text-center mt-4">
+              <small class="text-muted">
+                <i class="fas fa-exclamation-triangle me-1"></i>
+                For life-threatening emergencies, always call 911 first. 
+                SafeSphere AI provides general safety information and is not a substitute for emergency services.
+              </small>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% elif active_page == 'routes' %}
+    <!-- Safe Routes Map Section -->
+    <section class="map-section">
+      <div class="container-fluid">
+        <div class="row">
+          <!-- Sidebar -->
+          <div class="col-lg-4 col-md-5 bg-dark-subtle p-4 route-sidebar">
+            <h1 class="display-6 fw-bold mb-3">
+              <i class="fas fa-route me-2 text-primary"></i>
+              <span data-i18n="routes.title">Safe Routes Map</span>
+            </h1>
+            <p class="text-muted mb-4" data-i18n="routes.subtitle">Find flood-safe routes through New Jersey using real-time data.</p>
+
+            <!-- Route Planning Form -->
+            <div class="card bg-dark border-0 shadow mb-4">
+              <div class="card-body">
+                <h5 class="card-title mb-3">
+                  <i class="fas fa-map-marker-alt me-2"></i>
+                  <span data-i18n="routes.plan">Plan Your Route</span>
+                </h5>
+                <div class="mb-3">
+                  <label for="route-origin" class="form-label" data-i18n="routes.from">From</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    id="route-origin" 
+                    data-i18n="routes.from-placeholder"
+                    placeholder="Enter starting location in NJ"
+                    autocomplete="off"
+                  >
+                </div>
+                <div class="mb-3">
+                  <label for="route-destination" class="form-label" data-i18n="routes.to">To</label>
+                  <input 
+                    type="text" 
+                    class="form-control" 
+                    id="route-destination" 
+                    data-i18n="routes.to-placeholder"
+                    placeholder="Enter destination in NJ"
+                    autocomplete="off"
+                  >
+                </div>
+                <button type="button" id="get-route-btn" class="btn btn-primary w-100">
+                  <i class="fas fa-route me-2"></i>
+                  <span data-i18n="routes.find-route">Find Safe Route</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Route Results -->
+            <div id="route-results" class="mb-4 route-results">
+              <!-- Route results will be populated here by JavaScript -->
+            </div>
+
+            <!-- Current Flood Conditions -->
+            <div class="card bg-dark border-0 shadow mb-4">
+              <div class="card-body">
+                <h5 class="card-title mb-3">
+                  <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
+                  <span data-i18n="routes.current-conditions">Current Conditions</span>
+                </h5>
+                <div id="flood-info">
+                  <div class="text-center py-3 text-muted">
+                    <i class="fas fa-spinner fa-spin me-2"></i>
+                    <span data-i18n="routes.loading">Loading flood data...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Emergency Reporting -->
+            <div class="card bg-dark border-danger">
+              <div class="card-body text-center">
+                <h6 class="card-title text-danger">
+                  <i class="fas fa-exclamation-circle me-2"></i>
+                  <span data-i18n="routes.report-flooding">Report Flooding</span>
+                </h6>
+                <p class="small text-muted mb-3" data-i18n="routes.report-desc">Help keep the community safe by reporting flooded roads</p>
+                <button type="button" class="btn btn-danger btn-sm" onclick="SafeSphere.reportFlood()">
+                  <i class="fas fa-plus me-2"></i>
+                  <span data-i18n="routes.report-btn">Report Flood</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Data Attribution -->
+            <div class="mt-4 text-center">
+              <small class="text-muted">
+                <i class="fas fa-info-circle me-1"></i>
+                <span data-i18n="routes.data-by">Data provided by USGS & NWS</span>
+              </small>
+            </div>
+          </div>
+
+          <!-- Map Container -->
+          <div class="col-lg-8 col-md-7 p-0 map-container">
+            <div id="map" class="flood-map"></div>
+            
+            <!-- Map Loading Overlay -->
+            <div id="map-loading" class="map-loading-overlay">
+              <div class="text-center">
+                <i class="fas fa-spinner fa-spin fa-3x text-primary mb-3"></i>
+                <h5>Loading Map...</h5>
+                <p class="text-muted">Initializing flood safety navigation</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% elif active_page == 'login_success' %}
+    <!-- Login Success -->
+    <section class="hero-section d-flex align-items-center">
+      <div class="container text-center">
+        <div class="alert alert-success d-inline-block">
+          <i class="fas fa-check-circle me-2"></i>Successfully signed in!
+        </div>
+        <h1 class="display-4 fw-bold mb-3">Welcome to SafeSphere</h1>
+        <p class="lead mb-4">You're now logged in and can access all features.</p>
+        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+          <a href="{{ url_for('routes') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-route me-2"></i>Try Safe Routes
+          </a>
+          <a href="{{ url_for('board_page') }}" class="btn btn-outline-secondary btn-lg">
+            <i class="fas fa-comments me-2"></i>Visit Safety Board
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {% elif active_page == 'signup_success' %}
+    <!-- Signup Success -->
+    <section class="hero-section d-flex align-items-center">
+      <div class="container text-center">
+        <div class="alert alert-success d-inline-block">
+          <i class="fas fa-user-check me-2"></i>Account created successfully!
+        </div>
+        <h1 class="display-4 fw-bold mb-3">Welcome to SafeSphere</h1>
+        <p class="lead mb-4">Your account has been created and you're now logged in.</p>
+        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+          <a href="{{ url_for('routes') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-route me-2"></i>Get Started with Safe Routes</a>
+          <a href="{{ url_for('ai') }}" class="btn btn-outline-secondary btn-lg">
+            <i class="fas fa-robot me-2"></i>Explore SafeSphereAI
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {% else %}
+    <!-- Hero Section (Home) -->
+    <section class="hero-section d-flex align-items-center">
+      <div class="container text-center">
+        <img src="{{ url_for('static', filename='images/unnamed.png') }}" 
+             alt="SafeSphere" 
+             style="height: 120px; width: auto; margin-bottom: 20px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+        <h1 class="display-1 fw-bold mb-4" data-i18n="hero.title">SafeSphere</h1>
+        <p class="lead mb-5" data-i18n="hero.subtitle">Safety Solutions for New Jersey</p>
+        
+        <!-- Feature highlights -->
+        <div class="row mb-5">
+          <div class="col-md-4 mb-3">
+            <i class="fas fa-route feature-icon text-primary fa-2x mb-2"></i>
+            <h5 data-i18n="feature.routes.title">Flood-Safe Routes</h5>
+            <p class="text-muted" data-i18n="feature.routes.desc">Real-time routing that avoids flooded roads</p>
+          </div>
+          <div class="col-md-4 mb-3">
+            <i class="fas fa-comments feature-icon text-info fa-2x mb-2"></i>
+            <h5 data-i18n="feature.board.title">Community Board</h5>
+            <p class="text-muted" data-i18n="feature.board.desc">Share safety alerts with your neighbors</p>
+          </div>
+          <div class="col-md-4 mb-3">
+            <i class="fas fa-robot feature-icon text-success fa-2x mb-2"></i>
+            <h5 data-i18n="feature.ai.title">AI Assistant</h5>
+            <p class="text-muted" data-i18n="feature.ai.desc">Intelligent safety insights and guidance</p>
+          </div>
+        </div>
+
+        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
+          <button type="button" id="get-started-btn" class="btn btn-primary btn-lg">
+            <i class="fas fa-rocket me-2"></i><span data-i18n="hero.get-started">Get Started</span>
+          </button>
+          <a href="{{ url_for('routes') }}" class="btn btn-outline-secondary btn-lg">
+            <i class="fas fa-route me-2"></i><span data-i18n="hero.try-routes">Try Safe Routes</span>
+          </a>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-dark py-4 mt-auto">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+      <p class="mb-2 mb-md-0 text-muted">&copy; 2025 SafeSphere. All rights reserved.</p>
+      <div class="social-links">
+        <a href="#" class="text-muted me-3" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="text-muted me-3" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="#" class="text-muted" aria-label="GitHub"><i class="fab fa-github"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Google Maps API - Only load on routes page -->
+  {% if active_page == 'routes' %}
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyZB2GPM0pOlfuE1F8UyKDZWmsk-Os2Rw&callback=initializeFloodRouting&libraries=places,geometry" async defer></script>
+  {% endif %}
+
+  <!-- Custom JavaScript -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+</html>
