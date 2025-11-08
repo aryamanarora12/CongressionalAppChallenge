@@ -295,8 +295,7 @@ EMERGENCY CONTACTS INTEGRATION:
 
 911: Emergency services
 2-1-1: NJ Emergency Hotline
-1-800-544-8802: Coast Guard
-1-800-662-3115: Report downed power lines
+
 
 REAL-TIME ALERTS:
 
@@ -349,27 +348,7 @@ Write meaningful commit messages
 Add tests for new features
 Update documentation as needed
 
-===============================================================================
-KNOWN ISSUES
 
-SQLite has concurrency limitations (use PostgreSQL for production)
-Browser storage APIs (localStorage/sessionStorage) not supported in artifacts
-Some older browsers may have limited JavaScript support
-Map initialization requires stable internet connection
-
-===============================================================================
-FUTURE ENHANCEMENTS
-
-Mobile iOS/Android applications
-Push notifications for flood alerts
-Integration with local emergency services
-Enhanced machine learning models
-Expansion to other states beyond New Jersey
-Social media integration for viral alerts
-Historical flood data visualization
-User-customizable alert preferences
-Offline mode support
-Integration with smart home devices
 
 ===============================================================================
 TEAM & CONTACT
@@ -391,25 +370,7 @@ Bootstrap Team: UI framework
 Replit: Development and hosting platform
 Congressional App Challenge: Recognition and support
 
-===============================================================================
-LICENSE
-This project is licensed under the MIT License.
-Copyright (c) 2025 SafeSphere Development Team
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+
 ===============================================================================
 ADDITIONAL RESOURCES
 
@@ -419,17 +380,3 @@ Google Maps Platform: https://developers.google.com/maps/documentation
 Flask Documentation: https://flask.palletsprojects.com/
 Bootstrap Documentation: https://getbootstrap.com/docs/
 
-===============================================================================
-SUPPORT
-For bugs, feature requests, or questions:
-
-GitHub Issues: https://github.com/yourusername/safesphere/issues
-Email: orangekevchen@gmail.com, aryamanaroranj@gmail.com
-
-For emergencies, always call 911 first.
-SafeSphere provides information but is not a substitute for emergency services.
-===============================================================================
-Last Updated: January 2025
-STAY SAFE WITH SAFESPHERE
-Turn Around, Don't Drown - Your safety is our priority
-===============================================================================
