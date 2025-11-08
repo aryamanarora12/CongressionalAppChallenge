@@ -36,7 +36,7 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_recycle": 300, "pool_pre_ping":
 db.init_app(app)
 
 # Flood Safety Configuration
-GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "AIzaSyCyZB2GPM0pOlfuE1F8UyKDZWmsk-Os2Rw")
+GOOGLE_MAPS_API_KEY = os.environ.get("GOOGLE_MAPS_API_KEY", "")
 USGS_BASE_URL = "https://waterservices.usgs.gov/nwis/iv/"
 NWS_BASE_URL = "https://api.weather.gov"
 
@@ -102,7 +102,7 @@ class FloodDataService:
             # Check if we have the expected structure
             if 'value' not in data:
                 print("Unexpected USGS API response structure")
-                print(f"Response keys: {list(data.keys())}")
+                print(f"Response s: {list(data.s())}")
                 return False
 
             time_series = data.get('value', {}).get('timeSeries', [])
@@ -243,7 +243,7 @@ def get_google_route(origin: str, destination: str, **kwargs):
         params = {
             'origin': origin,
             'destination': destination,
-            'key': GOOGLE_MAPS_API_KEY,
+            '': GOOGLE_MAPS_API_,
             'departure_time': 'now'  # For real-time traffic
         }
 
@@ -393,12 +393,12 @@ def analyze_route_flood_risk_with_prediction(route_data: Dict, hours_ahead: int 
                 'location': prediction['location'],
                 'risk_level': prediction['risk_level'],
                 'risk_score': prediction['risk_score'],
-                'key_factors': prediction.get('key_factors', [])
+                '_factors': prediction.get('_factors', [])
             })
 
             # Add warning for high-risk segments
             if prediction['risk_level'] == 'high':
-                factors_str = ', '.join(prediction.get('key_factors', ['Multiple risk factors']))[:100]
+                factors_str = ', '.join(prediction.get('_factors', ['Multiple risk factors']))[:100]
                 warnings.append({
                     'type': 'predicted_flood',
                     'severity': 'high',
